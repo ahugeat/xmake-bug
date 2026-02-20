@@ -7,10 +7,13 @@ add_repositories("gf-repo https://github.com/GamedevFramework/xmake-repo")
 
 add_requires("gamedevframework2")
 
-if is_kind("static") then
-    add_requireconfs("gamedevframework2", {system = false, configs = {shared = false, debug = is_mode("debug")}})
-    add_requireconfs("gamedevframework2.**", {system = false, configs = {shared = false}})
-end
+add_requires("gamedevframework2")
+
+add_requireconfs("gamedevframework2", {system = false, configs = {shared = is_kind("shared")}})
+add_requireconfs("gamedevframework2.**", {system = false, configs = {shared = is_kind("shared")}})
+add_requireconfs("gamedevframework2.box2d", {override = true, version = "c05c48738fbe5c27625e36c5f0cfbdaddfc8359a", system = false, configs = {shared = is_kind("shared")}})
+
+add_requires("boost", {system = false, config = {all = false, locale = true, shared = is_kind("shared")}})
 
 add_rules("mode.debug", "mode.releasedbg", "mode.release")
 add_rules("plugin.compile_commands.autoupdate", {outputdir = "$(builddir)"})
@@ -24,6 +27,7 @@ if is_mode("sanitizers") then
     set_policy("build.sanitizer.undefined", true)
 end
 
+set_policy("package.requires_lock", true)
 set_policy("build.warning", true)
 set_warnings("allextra")
 set_languages("cxx20")
